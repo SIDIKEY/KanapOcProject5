@@ -42,5 +42,34 @@ const productDisplay = async () =>{
         select.innerHTML += `<option value="${productData.colors[i]}">${productData.colors[i]}</option>`;
       };
     console.log(productData.colors.length);
-}
+    add2Cart();
+};
+
 productDisplay();
+
+const add2Cart = () => {
+  console.log("test");
+  let button = document.getElementById("addToCart");
+  console.log(button);
+  button.addEventListener("click", () => {
+    let productAdded = JSON.parse(localStorage.getItem("Promise"));
+    let select = document.getElementById("colors");
+    console.log(select.value);
+    console.log(productAdded);
+
+    
+    if (productAdded == null) {
+      productAdded = [];
+      productAdded.push(productData);
+      console.log(productAdded);
+      localStorage.setItem("promise", JSON.stringify(productAdded));
+
+    };
+
+    
+  })
+}
+
+
+
+  
