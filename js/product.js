@@ -57,10 +57,16 @@ const add2Cart = () => {
     console.log(select.value);
     console.log(productAdded);
 
+    const productQuantity = Object.assign({}, productData,{
+      colors: `${select.value}`,
+      quantity: 1,
+    });
+    console.log(productQuantity);
+
     
     if (productAdded == null) {
       productAdded = [];
-      productAdded.push(productData);
+      productAdded.push(productQuantity);
       console.log(productAdded);
       localStorage.setItem("promise", JSON.stringify(productAdded));
 
