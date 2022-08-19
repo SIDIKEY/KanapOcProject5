@@ -63,6 +63,7 @@ const add2Cart = () => {
     });
     console.log(productQuantity);
 
+
     
     if (productAdded == null) {
       productAdded = [];
@@ -71,6 +72,8 @@ const add2Cart = () => {
       localStorage.setItem("promise", JSON.stringify(productAdded));
 
     };
+
+    
 
     
   })
