@@ -48,7 +48,7 @@ const productDisplay = async () =>{
 productDisplay();
 
 const add2Cart = () => {
-  console.log("test");
+  
   let button = document.getElementById("addToCart");
   console.log(button);
   button.addEventListener("click", () => {
@@ -63,20 +63,36 @@ const add2Cart = () => {
     });
     console.log(productQuantity);
 
-
-    
     if (productAdded == null) {
       productAdded = [];
       productAdded.push(productQuantity);
       console.log(productAdded);
-      localStorage.setItem("promise", JSON.stringify(productAdded));
+      localStorage.setItem("promise", JSON.stringify(productAdded));  
+    } 
+      for (i = 0; i < productAdded.length; i++) {
+        console.log("test000");
+        if(productAdded[i]._id == productData._id && productAdded[i].colors == select.value) {
+           return( 
+            productAdded[i].quantity++,
+            console.log("quantity++"),
+            localStorage.setItem("promise",JSON.stringify(productAdded)),
+            (productAdded = JSON.parse(localStorage.getItem("promise")))
+           );
+        }
+      }
+      for (i = 0; i < productAdded.length; i++) {
+        if(productAdded[i]._id == productData._id && productAdded[i].colors != select.value) {
+          return (console.log("test001"),
+          productAdded.push(productQuantity),
+          localSorage.setItem(`promise`,JSON.stringify(productAdded)),
+          productAdded= JSON.parse(localStorage.getItem("promise")))   
+        }
+      }
+    }
+   
+  );
+  return (productAdded = JSON.parse(localStorage.getItem("promise")));
 
-    };
-
-    
-
-    
-  })
 }
 
 

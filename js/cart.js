@@ -10,7 +10,7 @@ const cartDisplay = async () => {
         cart__items.innerHTML = addedToCart.map((promise) => `
         <article class="cart__item" data-id="${promise._id}" data-color="${promise.colors}">
            <div class="cart__item__img">
-                <img src="${promise.imageUrl}" alt="Photographie d'un canapé ${promise.altTxt}">
+                <img src="${promise.imageUrl}" alt="${promise.altTxt}">
             </div>
             <div class="cart__item__content">
                 <div class="cart__item__content__description">
@@ -21,7 +21,7 @@ const cartDisplay = async () => {
                 <div class="cart__item__content__settings">
                     <div class="cart__item__content__settings__quantity">
                         <p>Qté : </p>
-                        <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="42">
+                        <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${promise.quantity}">
                     </div>
                     <div class="cart__item__content__settings__delete">
                         <p class="deleteItem">Supprimer</p>
@@ -30,6 +30,12 @@ const cartDisplay = async () => {
             </div>
         </article>
         `);
-    }
+        document.getElementById("totalQuantity").innerHTML = `
+        ${addedToCart.quantity}
+        `;
+       
+    };
+    
+
 }
 cartDisplay();
