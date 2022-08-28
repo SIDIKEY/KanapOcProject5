@@ -5,22 +5,21 @@ const url = new URL(str);
 const id = url.searchParams.get("id");
 const host = "http://localhost:3000/";
 const objectURL = host + "api/products/" + id;
+let tabColors = [];
 
 let productData = [];
-
-
 
 const fetchProduct =async () => {
     await fetch(objectURL)
     .then ((res) => res.json())
-    .then ((promise) => {productData = promise
-    console.log(productData); })   
+    .then ((result) => {productData = result
+    // console.log(productData);
+   })   
 };
-
 
 const productDisplay = async () =>{
     await fetchProduct();
-    document.getElementById("item__img").innerHTML = `
+    document.querySelector(".item__img").innerHTML = `
     <img src="${productData.imageUrl}" alt="${productData.altTxt}">
     `;
     document.getElementById("title").innerHTML = `
@@ -33,68 +32,117 @@ const productDisplay = async () =>{
     ${productData.description}
     `;
     
-    
-    let select = document.getElementById("colors");
-    console.log(select);
-    console.log(productData.colors);
+    let color = document.getElementById("colors");
+    // console.log(color);
+     console.log(productData.colors);
 
     for (i = 0; i < productData.colors.length; i++) {
-        select.innerHTML += `<option value="${productData.colors[i]}">${productData.colors[i]}</option>`;
+        color.innerHTML += `<option value="${productData.colors[i]}">${productData.colors[i]}</option>`;
       };
-    console.log(productData.colors.length);
+    // console.log(productData.colors.length);
     add2Cart();
 };
-
 productDisplay();
 
 const add2Cart = () => {
   
   let button = document.getElementById("addToCart");
-  console.log(button);
+  // console.log(button);
   button.addEventListener("click", () => {
-    let productAdded = JSON.parse(localStorage.getItem("Promise"));
-    let select = document.getElementById("colors");
-    console.log(select.value);
-    console.log(productAdded);
+    let color = document.getElementById("colors").value;
+    let quantityCanap = document.getElementById("quantity").value;
 
-    const productQuantity = Object.assign({}, productData,{
-      colors: `${select.value}`,
-      quantity: 1,
-    });
-    console.log(productQuantity);
+    // console.log('la valeur de select', color.value);
+    // console.log('la valeur de quantityCanap', quantityCanap.value);
 
-    if (productAdded == null) {
-      productAdded = [];
-      productAdded.push(productQuantity);
-      console.log(productAdded);
-      localStorage.setItem("promise", JSON.stringify(productAdded));  
-    } 
-      for (i = 0; i < productAdded.length; i++) {
-        console.log("test000");
-        if(productAdded[i]._id == productData._id && productAdded[i].colors == select.value) {
-           return( 
-            productAdded[i].quantity++,
-            console.log("quantity++"),
-            localStorage.setItem("promise",JSON.stringify(productAdded)),
-            (productAdded = JSON.parse(localStorage.getItem("promise")))
-           );
-        }
+    if (!quantityCanap || !color) {
+      // console.log('quantityCanap value egal false');
+      document.getElementById("error").innerHTML = `<span>veuillez choisir une une quantite entre 1 et 100 !<span> </br> 
+      <span>veuillez choisir une couleur !<span>` ;
+      return
+    }else{
+      let productAdded = JSON.parse(localStorage.getItem("promise"));
+      console.log('valeur productadded  : ', productAdded);
+      if (!productAdded) {
+        
+        productAdded = [];
+        // console.log('id : ', id);
+        // console.log('color : ', [color]);
+        // console.log('quantitycanap : ', [quantityCanap]);
+        
+        // console.log('color : ',  typeof color);
+        console.log(productData);
+        productAdded.push({
+          idCanap : id,
+          listColor:[ color],
+          quantity: [quantityCanap],
+          name: productData.name,
+          description: productData.description,
+          price: productData.price,
+          imageUrl: productData.imageUrl
+  
+        });
+        // console.log(productAdded);
+        localStorage.setItem("promise", JSON.stringify(productAdded));
+       console.log('local storage crée');
+
+  
       }
-      for (i = 0; i < productAdded.length; i++) {
-        if(productAdded[i]._id == productData._id && productAdded[i].colors != select.value) {
-          return (console.log("test001"),
-          productAdded.push(productQuantity),
-          localSorage.setItem(`promise`,JSON.stringify(productAdded)),
-          productAdded= JSON.parse(localStorage.getItem("promise")))   
-        }
+      
+      else if(productAdded) {
+        console.log('local storage existe déjà');
+        productAdded.push({
+          idCanap : id,
+          listColor:[color],
+          quantity: [quantityCanap],
+          name: productData.name,
+          description: productData.description,
+          price: productData.price,
+          imageUrl: productData.imageUrl
+        })
+        localStorage.setItem('promise', JSON.stringify(productAdded));
+        
+        
+    
+        
+        
+        
+          
+        
+      
+
+       
+        
+          
+      
+
       }
+     
     }
-   
-  );
+
+
+    
+  }
+);
   return (productAdded = JSON.parse(localStorage.getItem("promise")));
 
 }
 
 
 
-  
+  // var bonjour;
+  // bonjour = 'sa';
+
+  // bonjour = bonjour + 'lut';
+
+
+
+  // // bonjour = 'lut';
+
+  // console.log(bonjour);
+
+
+
+
+
+ 

@@ -45,8 +45,11 @@ h2 {
 	/*background-color: var(--main-color);*/
 }
 
-
-
+#error{
+	color: red;
+	font-weight: bold;
+	font-size: 12px;
+}
 
 /********/
 /*Header*/
