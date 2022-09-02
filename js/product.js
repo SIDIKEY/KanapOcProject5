@@ -1,88 +1,85 @@
-
-
 const str = window.location;
 const url = new URL(str);
 const id = url.searchParams.get("id");
 const host = "http://localhost:3000/";
 const objectURL = host + "api/products/" + id;
 let tabColors = [];
+let button = document.getElementById("addToCart");
+let kanapChosen = {};
+let canapLocalStorage = {};
+let productAdded;
 
-let productData = [];
+
+
 
 const fetchProduct =async () => {
     await fetch(objectURL)
     .then ((res) => res.json())
-    .then ((result) => {productData = result
-    // console.log(productData);
+    .then ((result) => {kanapChosen = result
+    console.log(kanapChosen);
    })   
 };
 
 const productDisplay = async () =>{
     await fetchProduct();
     document.querySelector(".item__img").innerHTML = `
-    <img src="${productData.imageUrl}" alt="${productData.altTxt}">
+    <img src="${kanapChosen.imageUrl}" alt="${kanapChosen.altTxt}">
     `;
     document.getElementById("title").innerHTML = `
-    ${productData.name}
+    ${kanapChosen.name}
     `;
     document.getElementById("price").innerHTML = `
-    ${productData.price}
+    ${kanapChosen.price}
     `;
     document.getElementById("description").innerHTML = `
-    ${productData.description}
+    ${kanapChosen.description}
     `;
     
     let color = document.getElementById("colors");
-    // console.log(color);
-     console.log(productData.colors);
-
-    for (i = 0; i < productData.colors.length; i++) {
-        color.innerHTML += `<option value="${productData.colors[i]}">${productData.colors[i]}</option>`;
-      };
-    // console.log(productData.colors.length);
-    add2Cart();
+    kanapChosen.colors.map(couleur =>color.innerHTML += `<option value="${couleur}">${couleur}</option>`);
 };
+
 productDisplay();
 
-const add2Cart = () => {
-  
-  let button = document.getElementById("addToCart");
-  // console.log(button);
   button.addEventListener("click", () => {
+    let formulaireError = 0;
+    const errorColor = document.getElementById("error-couleur").textContent = ``;
+    const errorQuantity = document.getElementById("error-quantite").textContent = ``;
     let color = document.getElementById("colors").value;
     let quantityCanap = document.getElementById("quantity").value;
 
-    // console.log('la valeur de select', color.value);
-    // console.log('la valeur de quantityCanap', quantityCanap.value);
 
-    if (!quantityCanap || !color) {
-      // console.log('quantityCanap value egal false');
-      document.getElementById("error").innerHTML = `<span>veuillez choisir une une quantite entre 1 et 100 !<span> </br> 
-      <span>veuillez choisir une couleur !<span>` ;
-      return
-    }else{
-      let productAdded = JSON.parse(localStorage.getItem("promise"));
+    if (!color) {
+      formulaireError = 1 ;
+      errorColor.textContent = `Veuillez choisir une couleur !`;
+    }
+   
+    if (!quantityCanap || quantityCanap === "0") {
+      formulaireError = 1 ;
+      errorQuantity.textContent = `Veuillez choisir une une quantite entre 1 et 100 ! `;
+    }
+
+  if(formulaireError === 0 ){
+     productAdded = JSON.parse(localStorage.getItem("promise"));
+      console.log('productAdded ', productAdded);
       console.log('valeur productadded  : ', productAdded);
       if (!productAdded) {
         
-        productAdded = [];
-        // console.log('id : ', id);
-        // console.log('color : ', [color]);
-        // console.log('quantitycanap : ', [quantityCanap]);
         
-        // console.log('color : ',  typeof color);
-        console.log(productData);
-        productAdded.push({
-          idCanap : id,
+        productAdded = [];
+    
+        // console.log(kanapChosen);
+        canapLocalStorage.idCanap = id,
+        canapLocalStorage.name = kanapChosen.name,
+        canapLocalStorage.imageUrl = kanapChosen.imageUrl,
+        canapLocalStorage.description = kanapChosen.description,
+        canapLocalStorage.price = kanapChosen.price,
+        canapLocalStorage.info = {
           listColor:[ color],
           quantity: [quantityCanap],
-          name: productData.name,
-          description: productData.description,
-          price: productData.price,
-          imageUrl: productData.imageUrl
-  
-        });
-        // console.log(productAdded);
+        }
+
+        productAdded.push(canapLocalStorage);
         localStorage.setItem("promise", JSON.stringify(productAdded));
        console.log('local storage crée');
 
@@ -90,17 +87,47 @@ const add2Cart = () => {
       }
       
       else if(productAdded) {
-        console.log('local storage existe déjà');
-        productAdded.push({
-          idCanap : id,
-          listColor:[color],
-          quantity: [quantityCanap],
-          name: productData.name,
-          description: productData.description,
-          price: productData.price,
-          imageUrl: productData.imageUrl
+
+
+        console.log('result : ', productAdded.filter(x => x.idCanap).includes(id));
+
+
+        productAdded.map(canap => {
+          console.log(canap.idCanap);
+          if(id === canap.idCanap ){
+           console.log('meme id ');
+           // push seul ment info qui contient list color et quantity
+          }
+          else{
+           console.log('id different');
+            canapLocalStorage.idCanap = id,
+            canapLocalStorage.name = kanapChosen.name,
+            canapLocalStorage.imageUrl = kanapChosen.imageUrl,
+            canapLocalStorage.description = kanapChosen.description,
+            canapLocalStorage.price = kanapChosen.price,
+            canapLocalStorage.info = {
+            listColor:[ color],
+            quantity: [quantityCanap],
+        }
+        productAdded.push(canapLocalStorage);
+        localStorage.setItem("promise", JSON.stringify(productAdded));
+          }
+         
         })
-        localStorage.setItem('promise', JSON.stringify(productAdded));
+        
+        // productAdded.map(canape => console.log('idCanap ', canape.idCanap));
+
+        // console.log('local storage existe déjà');
+        // productAdded.push({
+        //   idCanap : id,
+        //   listColor:[color],
+        //   quantity: [quantityCanap],
+        //   name: kanapChosen.name,
+        //   description: kanapChosen.description,
+        //   price: kanapChosen.price,
+        //   imageUrl: kanapChosen.imageUrl
+        // })
+        // localStorage.setItem('promise', JSON.stringify(productAdded));
         
         
     
@@ -124,9 +151,8 @@ const add2Cart = () => {
     
   }
 );
-  return (productAdded = JSON.parse(localStorage.getItem("promise")));
 
-}
+
 
 
 

@@ -3,7 +3,7 @@ const fetchCards = async () => {
     await fetch("http://localhost:3000/api/products")
     .then ((res) => res.json())
     .then ((promise) => {cardData = promise
-    console.log(cardData); })
+    console.log('cardData', cardData); })
     
     
 }
