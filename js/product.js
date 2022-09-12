@@ -3,7 +3,6 @@ const url = new URL(str);
 const id = url.searchParams.get("id");
 const host = "http://localhost:3000/";
 const objectURL = host + "api/products/" + id;
-let tabColors = [];
 let button = document.getElementById("addToCart");
 let kanapChosen = {};
 let canapLocalStorage = {};
@@ -16,7 +15,7 @@ const fetchProduct =async () => {
     await fetch(objectURL)
     .then ((res) => res.json())
     .then ((result) => {kanapChosen = result
-    console.log(kanapChosen);
+    // console.log(kanapChosen);
    })   
 };
 
@@ -43,8 +42,10 @@ productDisplay();
 
   button.addEventListener("click", () => {
     let formulaireError = 0;
-    const errorColor = document.getElementById("error-couleur").textContent = ``;
-    const errorQuantity = document.getElementById("error-quantite").textContent = ``;
+    const errorColor = document.getElementById("error-couleur");
+    const errorQuantity = document.getElementById("error-quantite");
+    errorColor.textContent= '';
+    errorQuantity.textContent = '';
     let color = document.getElementById("colors").value;
     let quantityCanap = document.getElementById("quantity").value;
 
@@ -61,111 +62,89 @@ productDisplay();
 
   if(formulaireError === 0 ){
      productAdded = JSON.parse(localStorage.getItem("promise"));
-      console.log('productAdded ', productAdded);
-      console.log('valeur productadded  : ', productAdded);
-      if (!productAdded) {
-        
-        
+      // console.log('productAdded ', productAdded);
+      if (!productAdded){ 
         productAdded = [];
-    
-        // console.log(kanapChosen);
         canapLocalStorage.idCanap = id,
         canapLocalStorage.name = kanapChosen.name,
         canapLocalStorage.imageUrl = kanapChosen.imageUrl,
         canapLocalStorage.description = kanapChosen.description,
         canapLocalStorage.price = kanapChosen.price,
-        canapLocalStorage.info = {
-          listColor:[ color],
-          quantity: [quantityCanap],
-        }
+        canapLocalStorage.info = [
+          {
+            colorCanape: color,
+            quantity: quantityCanap,
+          }
+        ]
 
         productAdded.push(canapLocalStorage);
         localStorage.setItem("promise", JSON.stringify(productAdded));
-       console.log('local storage crée');
-
-  
       }
-      
       else if(productAdded) {
+        const listIdLocalStorage = productAdded.map(canape => canape.idCanap);
+
+        if(listIdLocalStorage.includes(id)){
+          const CanapeWithGoodId = productAdded.map(canape => {
+            let tabColors =  canape.info.map(info => info.colorCanape);
+            // console.log('tabColors ',tabColors);
+            if(id === canape.idCanap){
+
+              // console.log('color ',color);
+
+              if(!tabColors.includes(color)){
+                // console.log('couleur absent dans le tableau');
+
+                canape.info.push({
+                  colorCanape: color,
+                  quantity:  quantityCanap,
+                })
+                return canape;
+              }
+              else{
+                // console.log('couleur present dans le tableau');
+
+                canape.info.map(article =>{ 
+                  let quantityFinale;
+                  // tabColors.push(article.colorCanape)
+                  if(color === article.colorCanape){
+                    quantityFinale =  Number(article.quantity) + Number(quantityCanap)
+                    article.quantity = quantityFinale;
+                    
+                    return article;
+                  }
+                  
+                })
+              }
+                // console.log('tab couleur ', tabColors);
 
 
-        console.log('result : ', productAdded.filter(x => x.idCanap).includes(id));
+            }
+            return canape;
+          })
+          localStorage.setItem("promise", JSON.stringify(CanapeWithGoodId));
+        }else{
+          canapLocalStorage.idCanap = id,
+          canapLocalStorage.name = kanapChosen.name,
+          canapLocalStorage.imageUrl = kanapChosen.imageUrl,
+          canapLocalStorage.description = kanapChosen.description,
+          canapLocalStorage.price = kanapChosen.price,
+          canapLocalStorage.info = [
+            {
+              colorCanape: color,
+              quantity: quantityCanap,
+            }
+          ]
+  
+          productAdded.push(canapLocalStorage);
+          localStorage.setItem("promise", JSON.stringify(productAdded));
 
-
-        productAdded.map(canap => {
-          console.log(canap.idCanap);
-          if(id === canap.idCanap ){
-           console.log('meme id ');
-           // push seul ment info qui contient list color et quantity
-          }
-          else{
-           console.log('id different');
-            canapLocalStorage.idCanap = id,
-            canapLocalStorage.name = kanapChosen.name,
-            canapLocalStorage.imageUrl = kanapChosen.imageUrl,
-            canapLocalStorage.description = kanapChosen.description,
-            canapLocalStorage.price = kanapChosen.price,
-            canapLocalStorage.info = {
-            listColor:[ color],
-            quantity: [quantityCanap],
         }
-        productAdded.push(canapLocalStorage);
-        localStorage.setItem("promise", JSON.stringify(productAdded));
-          }
-         
-        })
-        
-        // productAdded.map(canape => console.log('idCanap ', canape.idCanap));
-
-        // console.log('local storage existe déjà');
-        // productAdded.push({
-        //   idCanap : id,
-        //   listColor:[color],
-        //   quantity: [quantityCanap],
-        //   name: kanapChosen.name,
-        //   description: kanapChosen.description,
-        //   price: kanapChosen.price,
-        //   imageUrl: kanapChosen.imageUrl
-        // })
-        // localStorage.setItem('promise', JSON.stringify(productAdded));
-        
-        
-    
-        
-        
-        
-          
-        
-      
-
-       
-        
-          
-      
-
       }
      
-    }
-
-
-    
+    } 
   }
 );
 
-
-
-
-
-  // var bonjour;
-  // bonjour = 'sa';
-
-  // bonjour = bonjour + 'lut';
-
-
-
-  // // bonjour = 'lut';
-
-  // console.log(bonjour);
 
 
 
