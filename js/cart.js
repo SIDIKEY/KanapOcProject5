@@ -1,4 +1,5 @@
 let articles = document.getElementById("cart__items");
+let commandeProducts = JSON.parse(localStorage.getItem("commandes"));
 let filterCart = []
 let cartPrice = document.getElementById("totalQuantity");
 let listCanapeAjouterAuPanier = JSON.parse(localStorage.getItem("promise"));
@@ -282,17 +283,32 @@ fetch("http://localhost:3000/api/products/order", {
   headers: {"content-Type":"application/json"},
   body:JSON.stringify(data),
 
-}).then((res) => res.json()).then((promise) =>{
-  let responseFetch = promise
-  console.log(responseFetch);
-})
-  
+}).then((res) => res.json())
+  .then((promise) =>{
+    let responseFetch = promise
+    console.log(responseFetch);
+  });
+
+  const dataCommande = {
+    contact : data.contact,
+    order : data.products,
+  };
+  if (commandeProducts == null){
+    console.log("commande NULL");
+    commandeProducts = [];
+    commandeProducts.push(dataCommande);
+    localStorage.setItem("commandes",JSON.stringify(commandeProducts));
+    console.log("SUCESS");
+
+  }
+  location.href = "confirmation.html";
   
 }else {
   alert("Veuillez remplir le formulaire correctement")
 }
 
-})          
+});    
+console.log(commandeProducts);      
           
           
           

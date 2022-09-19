@@ -1,9 +1,18 @@
-const str = window.location;
-const url = new URL(str);
-const id = url.searchParams.get("id");
-const orderId = document.getElementById("orderId");
-orderId.innerHTML = id;
+const commandes = JSON.parse(localStorage.getItem("commandes"));
 
-console.log("hello");
+const orderDisplay = async () => {
+    if (commandes){
+        await commandes;
+        document.getElementById("orderId").innerHTML = commandes.map((commande) =>`
+        ${commande.order}
+        `)
+        console.log("COMMANDE SUCESS");
+    }        
 
-localStorage.clear();
+        
+        
+    
+
+}
+
+orderDisplay();

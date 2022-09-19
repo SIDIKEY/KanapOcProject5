@@ -83,6 +83,9 @@ productDisplay();
       else if(productAdded) {
         const listIdLocalStorage = productAdded.map(canape => canape.idCanap);
 
+
+        // ici je regarde dans le d
+
         if(listIdLocalStorage.includes(id)){
           const CanapeWithGoodId = productAdded.map(canape => {
             let tabColors =  canape.info.map(info => info.colorCanape);
