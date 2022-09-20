@@ -1,9 +1,11 @@
-const commandes = JSON.parse(localStorage.getItem("commandes"));
+response = JSON.parse(localStorage.getItem("commandes"));
 
 const orderDisplay = async () => {
-    if (commandes){
-        await commandes;
-        document.getElementById("orderId").innerHTML = commandes.map((commande) =>`
+    if (response){
+        await response;
+        console.log("almost done");
+
+        document.getElementById("orderId").innerHTML = response.map((commande) =>`
         ${commande.order}
         `)
         console.log("COMMANDE SUCESS");
@@ -16,3 +18,4 @@ const orderDisplay = async () => {
 }
 
 orderDisplay();
+

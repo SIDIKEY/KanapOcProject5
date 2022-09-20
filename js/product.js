@@ -61,88 +61,33 @@ productDisplay();
     }
 
   if(formulaireError === 0 ){
+    quantityCanap = parseInt(quantityCanap);
      productAdded = JSON.parse(localStorage.getItem("promise"));
       // console.log('productAdded ', productAdded);
       if (!productAdded){ 
         productAdded = [];
-        canapLocalStorage.idCanap = id,
-        canapLocalStorage.name = kanapChosen.name,
-        canapLocalStorage.imageUrl = kanapChosen.imageUrl,
-        canapLocalStorage.description = kanapChosen.description,
-        canapLocalStorage.price = kanapChosen.price,
-        canapLocalStorage.info = [
-          {
-            colorCanape: color,
-            quantity: quantityCanap,
-          }
-        ]
+        canapLocalStorage.idCanap = id;
+        canapLocalStorage.quantity = quantityCanap;
+        canapLocalStorage.color = color;
+        
 
         productAdded.push(canapLocalStorage);
-        localStorage.setItem("promise", JSON.stringify(productAdded));
+       
       }
       else if(productAdded) {
-        const listIdLocalStorage = productAdded.map(canape => canape.idCanap);
+        const listIdLocalStorage = productAdded.findIndex(canape => canape.idCanap == id && canape.color == color);
 
-
-        // ici je regarde dans le d
-
-        if(listIdLocalStorage.includes(id)){
-          const CanapeWithGoodId = productAdded.map(canape => {
-            let tabColors =  canape.info.map(info => info.colorCanape);
-            // console.log('tabColors ',tabColors);
-            if(id === canape.idCanap){
-
-              // console.log('color ',color);
-
-              if(!tabColors.includes(color)){
-                // console.log('couleur absent dans le tableau');
-
-                canape.info.push({
-                  colorCanape: color,
-                  quantity:  quantityCanap,
-                })
-                return canape;
-              }
-              else{
-                // console.log('couleur present dans le tableau');
-
-                canape.info.map(article =>{ 
-                  let quantityFinale;
-                  // tabColors.push(article.colorCanape)
-                  if(color === article.colorCanape){
-                    quantityFinale =  Number(article.quantity) + Number(quantityCanap)
-                    article.quantity = quantityFinale;
-                    
-                    return article;
-                  }
-                  
-                })
-              }
-                // console.log('tab couleur ', tabColors);
-
-
-            }
-            return canape;
-          })
-          localStorage.setItem("promise", JSON.stringify(CanapeWithGoodId));
+        if(listIdLocalStorage != -1){
+          productAdded[listIdLocalStorage].quantity  = parseInt( productAdded[listIdLocalStorage].quantity) + quantityCanap;
         }else{
-          canapLocalStorage.idCanap = id,
-          canapLocalStorage.name = kanapChosen.name,
-          canapLocalStorage.imageUrl = kanapChosen.imageUrl,
-          canapLocalStorage.description = kanapChosen.description,
-          canapLocalStorage.price = kanapChosen.price,
-          canapLocalStorage.info = [
-            {
-              colorCanape: color,
-              quantity: quantityCanap,
-            }
-          ]
-  
+          canapLocalStorage.idCanap = id;
+          canapLocalStorage.quantity = quantityCanap;
+          canapLocalStorage.color = color;
           productAdded.push(canapLocalStorage);
-          localStorage.setItem("promise", JSON.stringify(productAdded));
-
         }
+
       }
+      localStorage.setItem("promise", JSON.stringify(productAdded));
      
     } 
   }
