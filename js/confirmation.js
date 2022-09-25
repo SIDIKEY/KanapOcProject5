@@ -10,12 +10,7 @@ const orderDisplay = async () => {
         `)
         console.log("COMMANDE SUCESS");
     }        
-
-        
-        
-    
-
 }
 
 orderDisplay();
-
+localStorage.clear();

@@ -1,4 +1,4 @@
-////**** PANIER****////
+
 
 // Déclaration de variable objet ajouté
 let commandeProducts = JSON.parse(localStorage.getItem("commandes"));
@@ -308,7 +308,7 @@ order.addEventListener('click', (e) => {
   e.preventDefault();
  
 if (CityValue && AdressValue && LastNameValue && FirstNameValue && EmailValue) {
-  console.log("send the the order");
+  console.log("send the order");
 
   const commandes = JSON.parse(localStorage.getItem("promise"));
   let commandeId = [];

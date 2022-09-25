@@ -60,9 +60,9 @@ productDisplay();
       errorQuantity.textContent = `Veuillez choisir une une quantite entre 1 et 100 ! `;
     }
 
-  if(formulaireError === 0 ){
-    quantityCanap = parseInt(quantityCanap);
-     productAdded = JSON.parse(localStorage.getItem("promise"));
+    if(formulaireError === 0 ){
+      quantityCanap = parseInt(quantityCanap);
+      productAdded = JSON.parse(localStorage.getItem("promise"));
       // console.log('productAdded ', productAdded);
       if (!productAdded){ 
         productAdded = [];
