@@ -15,27 +15,34 @@ const fetchProduct =async () => {
     await fetch(objectURL)
     .then ((res) => res.json())
     .then ((result) => {kanapChosen = result
-    // console.log(kanapChosen);
+    console.log(kanapChosen);
    })   
 };
 
 const productDisplay = async () =>{
     await fetchProduct();
-    document.querySelector(".item__img").innerHTML = `
-    <img src="${kanapChosen.imageUrl}" alt="${kanapChosen.altTxt}">
-    `;
-    document.getElementById("title").innerHTML = `
-    ${kanapChosen.name}
-    `;
-    document.getElementById("price").innerHTML = `
-    ${kanapChosen.price}
-    `;
-    document.getElementById("description").innerHTML = `
-    ${kanapChosen.description}
-    `;
-    
-    let color = document.getElementById("colors");
-    kanapChosen.colors.map(couleur =>color.innerHTML += `<option value="${couleur}">${couleur}</option>`);
+    //image
+  let itemImg = document.querySelector(".item__img");
+  let productImg = document.createElement("img");
+  itemImg.appendChild(productImg);
+  productImg.src = kanapChosen.imageUrl;
+  productImg.alt = kanapChosen.altText;
+   
+   //nom
+  let productTitle = document.getElementById("title");
+  productTitle.innerHTML = kanapChosen.name; 
+
+  //prix
+  let productPrice = document.getElementById("price");
+  productPrice.innerHTML = kanapChosen.price;
+
+  //description
+  let productDescription = document.getElementById("description");
+  productDescription.innerHTML = kanapChosen.description;
+
+  //choix couleur
+  let color = document.getElementById("colors");
+  kanapChosen.colors.map(couleur =>color.innerHTML += `<option value="${couleur}">${couleur}</option>`);
 };
 
 productDisplay();
@@ -63,7 +70,7 @@ productDisplay();
     if(formulaireError === 0 ){
       quantityCanap = parseInt(quantityCanap);
       productAdded = JSON.parse(localStorage.getItem("promise"));
-      // console.log('productAdded ', productAdded);
+       console.log('productAdded ', productAdded);
       if (!productAdded){ 
         productAdded = [];
         canapLocalStorage.idCanap = id;
@@ -72,6 +79,7 @@ productDisplay();
         
 
         productAdded.push(canapLocalStorage);
+        alert("article added to cart")
        
       }
       else if(productAdded) {
@@ -79,11 +87,13 @@ productDisplay();
 
         if(listIdLocalStorage != -1){
           productAdded[listIdLocalStorage].quantity  = parseInt( productAdded[listIdLocalStorage].quantity) + quantityCanap;
+          alert("this article's quantity in the cart has been updated")
         }else{
           canapLocalStorage.idCanap = id;
           canapLocalStorage.quantity = quantityCanap;
           canapLocalStorage.color = color;
           productAdded.push(canapLocalStorage);
+          alert("article added to cart")
         }
 
       }

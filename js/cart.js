@@ -137,13 +137,15 @@ function changeQuantity(e) {
 
         // On recherche le produit correspondant
         let foundProduct = cart.findIndex(
-            (p) => p.idcanap === productId && p.color === productColor
+            (p) => p.idCanap == productId && p.color == productColor
         );
         console.log("Recherche du produit, index :", foundProduct);
+        console.log(cart);
+        console.log(productId);
 
         // Si on le trouve et que la quantité est inférieur ou égale à 100 et suppérieur ou égale à 1, on modifie le panier LS
         if (
-            foundProduct != undefined &&
+            foundProduct != -1 &&
             quantityElement <= 100 &&
             quantityElement >= 1
         ) {
