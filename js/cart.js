@@ -44,6 +44,7 @@ async function getProduct() {
 async function init() {
     let panierComplet = await getProduct();
     createHTMLBasket(panierComplet);
+    
 
     AddEventRemoveProduct();
 
@@ -60,32 +61,113 @@ function createHTMLBasket(panierComplet) {
     console.log("complet", panierComplet);
 
     panierComplet.map((product) => {
-        shoppingItem.innerHTML += `
-    <article class="cart__item" data-id="${product._id}" data-color="${product.color}">
-        <div class="cart__item__img">
-            <img src="${product.img}" alt="${product.alt}">
-        </div>
-        <div class="cart__item__content">
-            <div class="cart__item__content__titlePrice">
-                <h2>${product.name}</h2>
-                <p>${product.price}€</p>
-            </div>
-            <div class="cart__item__content__settings">
-                <p>Couleur : ${product.color}</p>
-                    <div class="cart__item__content__settings__quantity">
-                    <p>Qté :  </p>
-                    <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${product.quantity}">
-                    </div>
-            </div>
-            <div class="cart__item__content__settings__delete">
-                <p class="deleteItem">Supprimer</p>
-            </div>
-        </div>
-    </article>
-    `;
-    console.log(product.img);
+
+      let productArticle = document.createElement("article");
+      document.getElementById(`cart__items`).appendChild(productArticle);
+      productArticle.className = "cart__item";
+      productArticle.setAttribute('data-id', product._id);
+      productArticle.setAttribute('data-color', product.color);
+    
+      // Création div
+      let productDivImg = document.createElement("div");
+      productArticle.appendChild(productDivImg);
+      productDivImg.className = "cart__item__img";
+    
+      // Insertion image
+      let productImg = document.createElement("img");
+      productDivImg.appendChild(productImg);
+      productImg.src = product.img;
+      productImg.alt = product.altTxt;
+      console.log(product.altTxt);
+      // Création div 
+      let productItemContent = document.createElement("div");
+      productArticle.appendChild(productItemContent);
+      productItemContent.className = "cart__item__content";
+    
+      // Création d'un élément enfant "div" pour nom/couleur/prix
+      let productItemContentTitlePrice = document.createElement("div");
+      productItemContent.appendChild(productItemContentTitlePrice);
+      productItemContentTitlePrice.className = "cart__item__content__titlePrice";
+    // Affichage du nom du produit
+      let productTitle = document.createElement("h2");
+      productItemContentTitlePrice.appendChild(productTitle);
+      productTitle.innerHTML = product.name;
+    
+      // Affichage du choix de la couleur du produit
+      let productColor = document.createElement("p");
+      productTitle.appendChild(productColor);
+      productColor.innerHTML = product.color;
+      productColor.style.fontSize = "18px";
+    
+      // Affichage du prix du produit
+      let productPrice = document.createElement("p");
+      productItemContentTitlePrice.appendChild(productPrice);
+      let price = product.price * product.quantity;
+      productPrice.innerHTML = price + " €";
+      console.log("ici", price);
+
+      // Création élément enfant pour quantité/suppression
+      let productItemContentSettings = document.createElement("div");
+      productItemContent.appendChild(productItemContentSettings);
+      productItemContentSettings.className = "cart__item__content__settings";
+  
+      // Création élément enfant pour la quantité
+      let productItemContentSettingsQuantity = document.createElement("div");
+      productItemContentSettings.appendChild(productItemContentSettingsQuantity);
+      productItemContentSettingsQuantity.className = "cart__item__content__settings__quantity";
+  
+      // Affichage de la quantité choisie
+      let productQte = document.createElement("p");
+      productItemContentSettingsQuantity.appendChild(productQte);
+      productQte.innerHTML = "Qté : ";
+  
+      // Création des options pour le choix de la quantité affichée
+      let productQuantity = document.createElement("input");
+      productItemContentSettingsQuantity.appendChild(productQuantity);
+      productQuantity.value = product.quantity;
+      productQuantity.className = "itemQuantity";
+      productQuantity.setAttribute("type", "number");
+      productQuantity.setAttribute("min", "1");
+      productQuantity.setAttribute("max", "100");
+      productQuantity.setAttribute("name", "itemQuantity");
+  
+      // Création d'une "div" pour la possibilité de suppression
+      let productItemContentSettingsDelete = document.createElement("div");
+      productItemContentSettings.appendChild(productItemContentSettingsDelete);
+      productItemContentSettingsDelete.className = "cart__item__content__settings__delete";
+  
+      // Céation de l'élément de suppression d'un produit
+      let productSupprimer = document.createElement("p");
+      productItemContentSettingsDelete.appendChild(productSupprimer);
+      productSupprimer.className = "deleteItem";
+      productSupprimer.innerHTML = "Supprimer";
+  
+      /*
+      //declaration tableau pour prix total
+      //totalOrder = [];
+  
+      //Calcul prix total
+      totalOrder.push(price);
+      let sumOrder = 0;
+      for (let i = 0; i < totalOrder.length; i++) {
+        sumOrder += totalOrder[i];
+      }
+      totalPrice.innerHTML = sumOrder.toString(); 
+      */
+  
+  
+      shoppingItem.appendChild(productArticle);
+      return price;
+
+      
+
+     
     });
-}
+};
+
+
+
+
 
 // Fonction pour supprimer un produit dans le panier
 function AddEventRemoveProduct() {
@@ -204,11 +286,11 @@ const City = document.getElementById("city");
 const Email = document.getElementById("email");
 
 let FirstNameValue, LastNameValue, AdressValue, CityValue, EmailValue;
-let regexFirstName = /^[a-z ,.'-]+$/i;
-let regexName = /^[a-z ,.'-]+$/i;
+let regexFirstName = /^[a-zA-Z]*$/i;
+let regexName = /^[a-zA-Z]*$/i;
 let errorFirstName = document.getElementById("firstNameErrorMsg");
 let errorLastName = document.getElementById("lastNameErrorMsg");
-let regexAddress = /^[a-zA-Z0-9\s,'-]*$/;
+let regexAddress = /^[-a-zA-Z0-9-()]+(\s+[-a-zA-Z0-9-()]+)*$/;
 let errorAddress = document.getElementById("addressErrorMsg");
 let regexCity =
   /^[a-zA-Z\u0080-\u024F]+(?:([\ \-\']|(\.\ ))[a-zA-Z\u0080-\u024F]+)*$/;
@@ -260,7 +342,7 @@ Address.addEventListener("input", function (e) {
   if (regexAddress.test(Address.value) == false && Address.value.length > 0) {
     errorAddress.innerHTML = "adress is not valid";
     AdressValue = Address.value;
-  } else if (Address.value.length == 0) {
+  } else if (Address.value.length == 0 || Address.value == null) {
     console.log("champ de saisie vide");
     errorAddress.innerHTML = "please enter your adress";
   } else {
