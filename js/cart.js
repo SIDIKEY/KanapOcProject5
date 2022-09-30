@@ -88,7 +88,8 @@ function createHTMLBasket(panierComplet) {
       let productItemContentTitlePrice = document.createElement("div");
       productItemContent.appendChild(productItemContentTitlePrice);
       productItemContentTitlePrice.className = "cart__item__content__titlePrice";
-    // Affichage du nom du produit
+
+      // Affichage du nom du produit
       let productTitle = document.createElement("h2");
       productItemContentTitlePrice.appendChild(productTitle);
       productTitle.innerHTML = product.name;

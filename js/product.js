@@ -62,7 +62,7 @@ productDisplay();
       errorColor.textContent = `Veuillez choisir une couleur !`;
     }
    
-    if (!quantityCanap || quantityCanap === "0" || quantityCanap <= "0" || quantityCanap >= "101") {
+    if (!quantityCanap || quantityCanap <= "0" || quantityCanap >= 101) {
       formulaireError = 1 ;
       errorQuantity.textContent = `Veuillez choisir une une quantite entre 1 et 100 ! `;
     }
